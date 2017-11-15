@@ -38,6 +38,32 @@ public class Server implements Runnable {
 
 	public class clientThread {
 
+		
+		private String clientUserName = null;
+		private DataInputStream in = null;
+		private printStream out = null;
+		private Socket client = null;
+		
+		
+		public clientThread(socket client, clientThread[] threads){
+			this.client = client;
+			this.threads = threads;
+			MAX_USERS = threads.length;
+		}
+		
+	
+		
+		@Override
+		public void run() {
+
+		}
+		
+		
+		
+		
+		
+		
+		
 	}
 
 	@Override
