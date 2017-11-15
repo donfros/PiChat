@@ -65,8 +65,9 @@ public class Server implements Runnable {
 
 	}
 
+	
 	public class clientThread {
-
+		
 	}
 
 	@Override
