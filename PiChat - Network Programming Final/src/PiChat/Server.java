@@ -36,38 +36,159 @@ public class Server implements Runnable {
 		}
 	}
 
-	public class clientThread {
+	public class clientThread {   /// will need edits eclipse is not showing errors for me 
 
-		
 		private String clientUserName = null;
 		private DataInputStream in = null;
 		private printStream out = null;
 		private Socket client = null;
-		
-		
-		public clientThread(socket client, clientThread[] threads){
+
+		public clientThread(socket client, clientThread[] threads) {
 			this.client = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
-		
-	
-		
+
 		@Override
 		public void run() {
+			
+		 int MAX_USERS = this.MAX_USERS
+				clientThread[] threads = this.threads;
 
 		}
+
+		try
+
+		{
+			
+			in = new DataInputStream(clientSocket.getInputStream());
+			out = new PrintStream(clientSocket.getOutputStream());
+			String username;
+			
+			while(true){
+				out.println("Enter your username: ")
+				if (username.indexOf('@') == -1){ ///Don't get point of this do we need it??
+					break;
+				}
+			}
+			
+			out.println(username + " has entered the piChat to leave enter ")
+			
+			synchronized(this){
+				int i=0;
+				while (i < MAX_USERS){
+					
+					if (threads[i] != null ){
+						if (threads[i] == this){
+							
+							clientUserName = usename;
+							break;
+							
+						}
+						
+						
+						
+						
+					}
+						
+					
+					i++;
+					
+					
+				}
 		
+				 for (int i = 0; i < MAX_USERS; i++) {
+			          if (threads[i] != null && threads[i] != this) {
+			            threads[i].os.println("New Person in chat: " + name);
+			          }
+				
+				}
+			}
+				
+				
+			synchronized(this){
+				int i=0;
+				while (i < MAX_USERS){
+					
+					if (threads[i] != null ){
+						if (threads[i].clienUserName != null){
+							
+							threads[i].out.println(userName)
+							
+						}
+					}
+						
+					i++;
+				}
 		
+				}
+			
+			
+			
+			
+			synchronized(this){
+				int i=0;
+				while (i < MAX_USERS){
+					
+					if (threads[i] != null ){
+						if (threads[i] != this){
+							if (threads[i].clienUserName != null){
+								
+							
+							
+							threads[i].out.println(UserName + " has left the PiChat");
+							}
+							
+						}
+					}
+						
+					i++;
+				}
 		
+				}
+			
+			
+			
+			
+			
+			synchronized(this){
+				int i=0;
+				while (i < MAX_USERS){
+					
+					if (threads[i] == this ){
+						
+						threads[i] = null;
+					}
+						
+					i++;
+				}
 		
+				}
+			
+			
+			
+			in.close();
+			out.close;
+			clientSockect.close();
+			
 		
-		
-		
+			
+			
+				
+				
+			
+			
+			
+			
+			
+			
+			
+			
+			
+		} catch(IOException e){
+			
+		}
+
 	}
 
-	@Override
-	public void run() {
-
-	}
 }
