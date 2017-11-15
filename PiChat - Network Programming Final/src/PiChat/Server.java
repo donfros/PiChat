@@ -10,18 +10,33 @@ import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
-public class Server {
+public class Server implements Runnable {
+
+	private static Socket clientSocket = null;
+	public static final int PORT = 7777;
+	private static ServerSocket serverSocket = null;
+	private static final int MAX_USERS = 4;
+	private static final clientThread[] threads = new clientThread[MAX_USERS];
 
 	public static void main(String[] args) throws IOException {
 		String clientSentence;
 		String serverSentence;
-
 		// Register service on port 12345
-		ServerSocket s = new ServerSocket(45555);
-		Socket s1 = s.accept(); // Wait and accept a connection
+		try {
+			serverSocket = new ServerSocket(PORT);
+		} catch (IOException e) {
+			System.out.println(e);
+		}
+		while (true) {
+			try {
+				clientSocket = serverSocket.accept();
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+		}
 		// Get a communication stream associated with the socket
-		OutputStream s1out = s1.getOutputStream();
-		InputStream s1In = s1.getInputStream();
+		OutputStream s1out = clientSocket.getOutputStream();
+		InputStream s1In = clientSocket.getInputStream();
 		DataOutputStream dos = new DataOutputStream(s1out);
 		DataInputStream dis = new DataInputStream(s1In);
 
@@ -31,13 +46,12 @@ public class Server {
 		do {
 			serverSentence = inFromUser.readLine();
 			dos.writeUTF(serverSentence);
-			if (serverSentence.equals("end")) 
+			if (serverSentence.equals("end"))
 				break;
-			
 
 			clientSentence = dis.readUTF();
 			System.out.println("Client: " + clientSentence);
-			if (clientSentence.equals("end")) {
+			if (clientSentence.equals("/quit")) {
 				break;
 			}
 
@@ -47,7 +61,16 @@ public class Server {
 		dis.close();
 		dos.close();
 		s1out.close();
-		s1.close();
+		clientSocket.close();
+
+	}
+
+	public class clientThread {
+
+	}
+
+	@Override
+	public void run() {
 
 	}
 
