@@ -34,45 +34,14 @@ public class Server implements Runnable {
 				System.out.println(e);
 			}
 		}
-		// Get a communication stream associated with the socket
-		OutputStream s1out = clientSocket.getOutputStream();
-		InputStream s1In = clientSocket.getInputStream();
-		DataOutputStream dos = new DataOutputStream(s1out);
-		DataInputStream dis = new DataInputStream(s1In);
-
-		BufferedReader inFromUser = new BufferedReader(new InputStreamReader(System.in));
-
-		// exchange messages until the client ends the connection
-		do {
-			serverSentence = inFromUser.readLine();
-			dos.writeUTF(serverSentence);
-			if (serverSentence.equals("end"))
-				break;
-
-			clientSentence = dis.readUTF();
-			System.out.println("Client: " + clientSentence);
-			if (clientSentence.equals("/quit")) {
-				break;
-			}
-
-		} while (true);
-		System.out.println("This session has ended.");
-		// Close the connection, but not the server socket
-		dis.close();
-		dos.close();
-		s1out.close();
-		clientSocket.close();
-
 	}
 
-	
 	public class clientThread {
-		
+
 	}
 
 	@Override
 	public void run() {
 
 	}
-
 }
