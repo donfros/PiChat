@@ -13,24 +13,23 @@ import java.net.Socket;
 
 /**
  * 
- * @author partlows
- * this is aids
+ * @author partlows this is aids
  *
  */
 public class Server implements Runnable {
 
+	public static final clientThread[] threads = new clientThread[MAX_USERS];
 	private static Socket clientSocket = null;
 	public static final int PORT = 7777;
 	private static ServerSocket serverSocket = null;
 	public static final int MAX_USERS = 4;
-	public static final clientThread[] threads = new clientThread[MAX_USERS];
 
 	public static void main(String[] args) throws IOException {
 		String clientSentence;
 		String serverSentence;
 		// Register service on port 12345
 		try {
-		
+
 			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			System.out.println(e);
@@ -57,187 +56,131 @@ public class Server implements Runnable {
 
 	}
 
-	public class clientThread { /// will need edits eclipse is not showing
-								/// errors for me
-
-
-		private String clientUserName = null;
-		private DataInputStream in = null;
-		private PrintStream out = null;
-		private Socket client = null;
 
 		public class clientThread extends Thread {
-
-
-
-		public clientThread(Socket client, clientThread[] threads) {
-			this.client = client;
-			this.threads = threads;
-			MAX_USERS = threads.length;
-		}
-
-			public clientThread(Socket clientSocket, clientThread[] threads) {
-
-			}
-
+			
 			private String clientUserName = null;
 			private DataInputStream in = null;
-			private printStream out = null;
+			private PrintStream out = null;
 			private Socket client = null;
 
-			public clientThread(socket client, clientThread[] threads) {
+			public clientThread(Socket client, clientThread[] threads) {
 				this.client = client;
 				this.threads = threads;
 				MAX_USERS = threads.length;
 			}
 
 
-		public void run() {
-			
-		 int MAX_USERS = this.MAX_USERS;
+			public void run() {
+
+				int MAX_USERS = this.MAX_USERS;
 				clientThread[] threads = this.threads;
 
-		
+				try
 
-			try
+				{
 
-		{
-			
-			in = new DataInputStream(clientSocket.getInputStream());
-			out = new PrintStream(clientSocket.getOutputStream());
-			String username;
-			
-			while(true){
-				out.println("Enter your username: ");
-				if (username.indexOf('@') == -1){ ///Don't get point of this do we need it??
-					break;
-				}
-			}
-			
-			out.println(username + " has entered the piChat to leave enter ");
-			
-			synchronized(this){
-				int i=0;
-				while (i < MAX_USERS){
-					
-					if (threads[i] != null ){
-						if (threads[i] == this){
-							
-							clientUserName = username;
+					in = new DataInputStream(clientSocket.getInputStream());
+					out = new PrintStream(clientSocket.getOutputStream());
+					String username;
+
+					while (true) {
+						out.println("Enter your username: ");
+						if (username.indexOf('@') == -1) { /// Don't get point
+															/// of this do we
+															/// need it??
 							break;
-							
-						}
-						
-						
-						
-						
-					}
-						
-					
-					i++;
-					
-					
-				}
-		
-				 for (int i1 = 0; i1 < MAX_USERS; i1++) {
-			          if (threads[i1] != null && threads[i1] != this) {
-			            threads[i1].out.println("New Person in chat: " + username);
-			          }
-				
-				}
-			}
-				
-				
-			synchronized(this){
-				int i=0;
-				while (i < MAX_USERS){
-					
-					if (threads[i] != null ){
-						if (threads[i].clientUserName != null){
-							
-							threads[i].out.println(username);
-							
 						}
 					}
-						
-					i++;
-				}
-		
-				}
-			
-			
-			
-			
-			synchronized(this){
-				int i=0;
-				while (i < MAX_USERS){
-					
-					if (threads[i] != null ){
-						if (threads[i] != this){
-							if (threads[i].clientUserName != null){
-								
-							
-							
-							threads[i].out.println(username + " has left the PiChat");
+
+					out.println(username + " has entered the piChat to leave enter ");
+
+					synchronized (this) {
+						int i = 0;
+						while (i < MAX_USERS) {
+
+							if (threads[i] != null) {
+								if (threads[i] == this) {
+
+									clientUserName = username;
+									break;
+
+								}
+
 							}
-							
+
+							i++;
+
+						}
+
+						for (int i1 = 0; i1 < MAX_USERS; i1++) {
+							if (threads[i1] != null && threads[i1] != this) {
+								threads[i1].out.println("New Person in chat: " + username);
+							}
+
 						}
 					}
-						
-					i++;
-				}
-		
-				}
-			
-			
-			
-			
-			
-			synchronized(this){
-				int i=0;
-				while (i < MAX_USERS){
-					
-					if (threads[i] == this ){
-						
-						threads[i] = null;
+
+					synchronized (this) {
+						int i = 0;
+						while (i < MAX_USERS) {
+
+							if (threads[i] != null) {
+								if (threads[i].clientUserName != null) {
+
+									threads[i].out.println(username);
+
+								}
+							}
+
+							i++;
+						}
+
 					}
-						
-					i++;
+
+					synchronized (this) {
+						int i = 0;
+						while (i < MAX_USERS) {
+
+							if (threads[i] != null) {
+								if (threads[i] != this) {
+									if (threads[i].clientUserName != null) {
+
+										threads[i].out.println(username + " has left the PiChat");
+									}
+
+								}
+							}
+
+							i++;
+						}
+
+					}
+
+					synchronized (this) {
+						int i = 0;
+						while (i < MAX_USERS) {
+
+							if (threads[i] == this) {
+
+								threads[i] = null;
+							}
+
+							i++;
+						}
+
+					}
+
+					in.close();
+					out.close();
+					clientSocket.close();
+
+				} catch (IOException e) {
+
 				}
-		
-				}
-			
-			
-			
-			in.close();
-			out.close();
-			clientSocket.close();
-			
-		
-			
-			
-				
-				
-			
-			
-			
-			
-			
-			
-			
-			
-			
-		}catch(
-			IOException e)
-			{
 
 			}
-
-		}
-
-		
 
 		}
 	}
 }
-
