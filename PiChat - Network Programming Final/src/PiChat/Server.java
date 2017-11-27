@@ -11,19 +11,26 @@ import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+/**
+ * 
+ * @author partlows
+ * this is aids
+ *
+ */
 public class Server implements Runnable {
 
 	private static Socket clientSocket = null;
 	public static final int PORT = 7777;
 	private static ServerSocket serverSocket = null;
-	private static final int MAX_USERS = 4;
-	private static final clientThread[] threads = new clientThread[MAX_USERS];
+	public static final int MAX_USERS = 4;
+	public static final clientThread[] threads = new clientThread[MAX_USERS];
 
 	public static void main(String[] args) throws IOException {
 		String clientSentence;
 		String serverSentence;
 		// Register service on port 12345
 		try {
+			jfid;sa 
 			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			System.out.println(e);
@@ -31,24 +38,59 @@ public class Server implements Runnable {
 		while (true) {
 			try {
 				clientSocket = serverSocket.accept();
+				int i = 0;
+				for (i = 0; i < MAX_USERS; i++) {
+					if (threads[i] == null) {
+						(threads[i] = new clientThread(clientSocket, threads)).start();
+					}
+				}
+				if (i == MAX_USERS) {
+					PrintStream os = new PrintStream(clientSocket.getOutputStream());
+					os.println("Server is full. Please try again later.");
+					os.close();
+					clientSocket.close();
+				}
 			} catch (IOException e) {
 				System.out.println(e);
 			}
 		}
+
 	}
 
-	public class clientThread {   /// will need edits eclipse is not showing errors for me 
+	public class clientThread { /// will need edits eclipse is not showing
+								/// errors for me
 
+<<<<<<< HEAD
 		private String clientUserName = null;
 		private DataInputStream in = null;
 		private PrintStream out = null;
 		private Socket client = null;
+=======
+		public class clientThread extends Thread {
+>>>>>>> branch 'master' of https://github.com/donfros/PiChat.git
 
+<<<<<<< HEAD
 		public clientThread(Socket client, clientThread[] threads) {
 			this.client = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
+=======
+			public clientThread(Socket clientSocket, clientThread[] threads) {
+
+			}
+
+			private String clientUserName = null;
+			private DataInputStream in = null;
+			private printStream out = null;
+			private Socket client = null;
+
+			public clientThread(socket client, clientThread[] threads) {
+				this.client = client;
+				this.threads = threads;
+				MAX_USERS = threads.length;
+			}
+>>>>>>> branch 'master' of https://github.com/donfros/PiChat.git
 
 		public void run() {
 			
@@ -57,7 +99,7 @@ public class Server implements Runnable {
 
 		
 
-		try
+			try
 
 		{
 			
@@ -185,11 +227,22 @@ public class Server implements Runnable {
 			
 			
 			
-		} catch(IOException e){
-			
+		}catch(
+			IOException e)
+			{
+
+			}
+
 		}
 
-	}
+		public void run() {
+			// TODO Auto-generated method stub
 
+<<<<<<< HEAD
 }
 }
+=======
+		}
+	}
+}}
+>>>>>>> branch 'master' of https://github.com/donfros/PiChat.git
