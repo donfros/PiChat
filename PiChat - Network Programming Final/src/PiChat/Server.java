@@ -94,6 +94,7 @@ public class Server {
 														/// need it??
 						break;
 					}
+					
 				}
 
 				out.println(username + " has entered the piChat to leave enter ");
@@ -104,8 +105,7 @@ public class Server {
 
 						if (threads[i] != null) {
 							if (threads[i] == this) {
-
-								clientUserName = username;
+								clientUserName = "@" + username;
 								break;
 
 							}
@@ -119,18 +119,26 @@ public class Server {
 					for (int i1 = 0; i1 < MAX_USERS; i1++) {
 						if (threads[i1] != null && threads[i1] != this) {
 							threads[i1].out.println("New Person in chat: " + username);
-						}
+						}	
 
 					}
 				}
+				  while (true) {
+				        String line = in.readLine();
+				        if (line.startsWith("/quit")) {
+				          break;
+				        }
+				
+				
+				  
 
-				synchronized (this) {
+				synchronized (this) {   ///Public method 
 					int i = 0;
 					while (i < MAX_USERS) {
 
 						if (threads[i] != null) {
 							if (threads[i].clientUserName != null) {
-
+								 threads[i].out.println("<" + username + "> " + line);
 							}
 						}
 
@@ -176,11 +184,13 @@ public class Server {
 				out.close();
 				clientSocket.close();
 
-			} catch (IOException e) {
+			} 
+				  }catch (IOException e) {
 
 			}
 
 		}
 
 	}
-}
+	}
+
