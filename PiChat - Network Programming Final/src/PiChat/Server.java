@@ -14,6 +14,7 @@ import java.net.Socket;
 /**
  * 
  * @author partlows
+ * this is aids
  *
  */
 public class Server implements Runnable {
@@ -29,6 +30,7 @@ public class Server implements Runnable {
 		String serverSentence;
 		// Register service on port 12345
 		try {
+			jfid;sa 
 			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			System.out.println(e);
