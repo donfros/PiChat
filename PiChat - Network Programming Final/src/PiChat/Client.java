@@ -2,7 +2,6 @@ package PiChat;
 
 import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
@@ -11,9 +10,11 @@ import java.net.UnknownHostException;
 
 public class Client implements Runnable {
 // fuck this
+	public static String name = "";
 	public static int PORT = 7777;
 
-	private static String host = "10.200.160.146";
+	private static String host = "10.200.31.171";
+	//private static String host = "127.0.0.1";
 
 		 // The client socket
 		  private static Socket clientSocket = null;
@@ -28,7 +29,6 @@ public class Client implements Runnable {
 		  public static void main(String[] args) {
 
 		    // The default host.
-		    String host = "localhost";
 
 		    if (args.length < 2) {
 		      System.out
@@ -64,7 +64,11 @@ public class Client implements Runnable {
 		        /* Create a thread to read from the server. */
 		        new Thread(new Client()).start();
 		        while (!closed) {
-		          os.println(inputLine.readLine().trim());
+		        	String input = inputLine.readLine().trim();
+		        	if(name.equals("")){
+		        		name = input;
+		        	}
+		          os.println(input);
 		        }
 		        /*
 		         * Close the output stream, close the input stream, close the socket.
@@ -83,7 +87,7 @@ public class Client implements Runnable {
 		   * 
 		   * @see java.lang.Runnable#run()
 		   */
-		  public void run() {
+		public void run() {
 		    /*
 		     * Keep on reading from the socket till we receive "Bye" from the
 		     * server. Once we received that then we want to break.
@@ -91,7 +95,9 @@ public class Client implements Runnable {
 		    String responseLine;
 		    try {
 		      while ((responseLine = is.readLine()) != null) {
-		        System.out.println(responseLine);
+		    	  if(!responseLine.contains("<"+name+">")){
+		    		  System.out.println(responseLine);
+		    	  }
 		        if (responseLine.indexOf("*** Bye") != -1)
 		          break;
 		      }
