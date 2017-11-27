@@ -65,6 +65,8 @@ public class Server implements Runnable {
 			private PrintStream out = null;
 			private Socket client = null;
 			private int MAX_USERS;
+			private final clientThread[] threads;
+			
 
 			public clientThread(Socket client, clientThread[] threads) {
 				this.client = client;
