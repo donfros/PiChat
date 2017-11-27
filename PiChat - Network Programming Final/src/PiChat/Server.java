@@ -18,11 +18,12 @@ import java.net.Socket;
  */
 public class Server implements Runnable {
 
-	public static final clientThread[] threads = new clientThread[MAX_USERS];
+
 	private static Socket clientSocket = null;
 	public static final int PORT = 7777;
 	private static ServerSocket serverSocket = null;
 	public static final int MAX_USERS = 4;
+	public static final clientThread[] threads = new clientThread[MAX_USERS];
 
 	public static void main(String[] args) throws IOException {
 		String clientSentence;
@@ -63,6 +64,7 @@ public class Server implements Runnable {
 			private DataInputStream in = null;
 			private PrintStream out = null;
 			private Socket client = null;
+			private int MAX_USERS;
 
 			public clientThread(Socket client, clientThread[] threads) {
 				this.client = client;
@@ -182,5 +184,12 @@ public class Server implements Runnable {
 			}
 
 		}
+
+
+		@Override
+		public void run() {
+			// TODO Auto-generated method stub
+			
+		}
 	}
-}
+
