@@ -42,6 +42,7 @@ public class Server implements Runnable {
 				for (i = 0; i < MAX_USERS; i++) {
 					if (threads[i] == null) {
 						(threads[i] = new clientThread(clientSocket, threads)).start();
+						break;
 					}
 				}
 				if (i == MAX_USERS) {
@@ -58,7 +59,7 @@ public class Server implements Runnable {
 	}
 
 
-		public class clientThread extends Thread {
+		public static class clientThread extends Thread {
 			
 			private String clientUserName = null;
 			private DataInputStream in = null;
