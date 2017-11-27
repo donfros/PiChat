@@ -1,12 +1,7 @@
 package PiChat;
 
-import java.io.BufferedReader;
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -25,7 +20,7 @@ public class Server {
 	public static final int MAX_USERS = 4;
 	public static final clientThread[] threads = new clientThread[MAX_USERS];
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) {
 		String clientSentence;
 		String serverSentence;
 		// Register service on port 12345
@@ -78,107 +73,85 @@ public class Server {
 			int MAX_USERS = this.MAX_USERS;
 			clientThread[] threads = this.threads;
 
-			try
+			try {
+			      /*
+			       * Create input and output streams for this client.
+			       */
+			      in = new DataInputStream(clientSocket.getInputStream());
+			      out = new PrintStream(clientSocket.getOutputStream());
+			      String name;
+			      while (true) {
+			        out.println("Enter your name.");
+			        name = in.readLine().trim();
+			        if (name.indexOf('@') == -1) {
+			          break;
+			        } else {
+			          out.println("The name should not contain '@' character.");
+			        }
+			      }
 
-			{
+			      /* Welcome the new the client. */
+			      out.println("Welcome " + name
+			          + " to our chat room.\nTo leave enter /quit in a new line.");
+			      synchronized (this) {
+			        for (int i = 0; i < MAX_USERS; i++) {
+			          if (threads[i] != null && threads[i] == this) {
+			            clientUserName = "@" + name;
+			            break;
+			          }
+			        }
+			        for (int i = 0; i < MAX_USERS; i++) {
+			          if (threads[i] != null && threads[i] != this) {
+			            threads[i].out.println("*** A new user " + name
+			                + " entered the chat room !!! ***");
+			          }
+			        }
+			      }
+			      /* Start the conversation. */
+			      while (true) {
+			        String line = in.readLine();
+			        if (line.startsWith("/quit")) {
+			          break;
+			        }
+			          /* The message is public, broadcast it to all other clients. */
+			          synchronized (this) {
+			            for (int i = 0; i < MAX_USERS; i++) {
+			              if (threads[i] != null && threads[i].clientUserName != null) {
+			                threads[i].out.println("<" + name + "> " + line);
+			              }
+			            }
+			          }
+			        }
+			      synchronized (this) {
+			        for (int i = 0; i < MAX_USERS; i++) {
+			          if (threads[i] != null && threads[i] != this
+			              && threads[i].clientUserName != null) {
+			            threads[i].out.println("*** The user " + name
+			                + " is leaving the chat room !!! ***");
+			          }
+			        }
+			      }
+			      out.println("*** Bye " + name + " ***");
 
-				in = new DataInputStream(clientSocket.getInputStream());
-				out = new PrintStream(clientSocket.getOutputStream());
-				String username;
-
-				while (true) {
-					out.println("Enter your username: ");
-					username = in.readLine().trim();
-					if (username.indexOf('@') == -1) { /// Don't get point
-														/// of this do we
-														/// need it??
-						break;
-					}
-				}
-
-				out.println(username + " has entered the piChat to leave enter ");
-
-				synchronized (this) {
-					int i = 0;
-					while (i < MAX_USERS) {
-
-						if (threads[i] != null) {
-							if (threads[i] == this) {
-
-								clientUserName = username;
-								break;
-
-							}
-
-						}
-
-						i++;
-
-					}
-
-					for (int i1 = 0; i1 < MAX_USERS; i1++) {
-						if (threads[i1] != null && threads[i1] != this) {
-							threads[i1].out.println("New Person in chat: " + username);
-						}
-
-					}
-				}
-
-				synchronized (this) {
-					int i = 0;
-					while (i < MAX_USERS) {
-
-						if (threads[i] != null) {
-							if (threads[i].clientUserName != null) {
-
-							}
-						}
-
-						i++;
-					}
-
-				}
-
-				synchronized (this) {
-					int i = 0;
-					while (i < MAX_USERS) {
-
-						if (threads[i] != null) {
-							if (threads[i] != this) {
-								if (threads[i].clientUserName != null) {
-
-									threads[i].out.println(username + " has left the PiChat");
-								}
-
-							}
-						}
-
-						i++;
-					}
-
-				}
-
-				synchronized (this) {
-					int i = 0;
-					while (i < MAX_USERS) {
-
-						if (threads[i] == this) {
-
-							threads[i] = null;
-						}
-
-						i++;
-					}
-
-				}
-
-				in.close();
-				out.close();
-				clientSocket.close();
-
-			} catch (IOException e) {
-
-			}
+			      /*
+			       * Clean up. Set the current thread variable to null so that a new client
+			       * could be accepted by the server.
+			       */
+			      synchronized (this) {
+			        for (int i = 0; i < MAX_USERS; i++) {
+			          if (threads[i] == this) {
+			            threads[i] = null;
+			          }
+			        }
+			      }
+			      /*
+			       * Close the output stream, close the input stream, close the socket.
+			       */
+			      in.close();
+			      out.close();
+			      clientSocket.close();
+			    } catch (IOException e) {
+			    }
 
 		}
 
