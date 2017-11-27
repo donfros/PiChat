@@ -16,9 +16,9 @@ import java.net.Socket;
  * @author partlows this is aids
  *
  */
-public class Server implements Runnable {
+public class Server {
 
-///test
+	/// test
 	private static Socket clientSocket = null;
 	public static final int PORT = 7777;
 	private static ServerSocket serverSocket = null;
@@ -58,143 +58,129 @@ public class Server implements Runnable {
 
 	}
 
+	public static class clientThread extends Thread {
 
-		public static class clientThread extends Thread {
-			
-			private String clientUserName = null;
-			private DataInputStream in = null;
-			private PrintStream out = null;
-			private Socket client = null;
-			private int MAX_USERS;
-			 private final clientThread[] threads;
-			
-			
+		private String clientUserName = null;
+		private DataInputStream in = null;
+		private PrintStream out = null;
+		private Socket client = null;
+		private int MAX_USERS;
+		private final clientThread[] threads;
 
-			public clientThread(Socket client, clientThread[] threads) {
-				this.client = client;
-				this.threads = threads;
-				MAX_USERS = threads.length;
-			}
+		public clientThread(Socket client, clientThread[] threads) {
+			this.client = client;
+			this.threads = threads;
+			MAX_USERS = threads.length;
+		}
 
+		public void run() {
 
-			public void run() {
+			int MAX_USERS = this.MAX_USERS;
+			clientThread[] threads = this.threads;
 
-				int MAX_USERS = this.MAX_USERS;
-				clientThread[] threads = this.threads;
+			try
 
-				try
+			{
 
-				{
+				in = new DataInputStream(clientSocket.getInputStream());
+				out = new PrintStream(clientSocket.getOutputStream());
+				String username;
 
-					in = new DataInputStream(clientSocket.getInputStream());
-					out = new PrintStream(clientSocket.getOutputStream());
-					String username;
-
-					while (true) {
-						out.println("Enter your username: ");
-						username = in.readLine().trim();
-						if (username.indexOf('@') == -1) { /// Don't get point
-															/// of this do we
-															/// need it??
-							break;
-						}
+				while (true) {
+					out.println("Enter your username: ");
+					username = in.readLine().trim();
+					if (username.indexOf('@') == -1) { /// Don't get point
+														/// of this do we
+														/// need it??
+						break;
 					}
+				}
 
-					out.println(username + " has entered the piChat to leave enter ");
+				out.println(username + " has entered the piChat to leave enter ");
 
-					synchronized (this) {
-						int i = 0;
-						while (i < MAX_USERS) {
+				synchronized (this) {
+					int i = 0;
+					while (i < MAX_USERS) {
 
-							if (threads[i] != null) {
-								if (threads[i] == this) {
-
-									clientUserName = username;
-									break;
-
-								}
-
-							}
-
-							i++;
-
-						}
-
-						for (int i1 = 0; i1 < MAX_USERS; i1++) {
-							if (threads[i1] != null && threads[i1] != this) {
-								threads[i1].out.println("New Person in chat: " + username);
-							}
-
-						}
-					}
-
-					synchronized (this) {
-						int i = 0;
-						while (i < MAX_USERS) {
-
-							if (threads[i] != null) {
-								if (threads[i].clientUserName != null) {
-
-								
-
-								}
-							}
-
-							i++;
-						}
-
-					}
-
-					synchronized (this) {
-						int i = 0;
-						while (i < MAX_USERS) {
-
-							if (threads[i] != null) {
-								if (threads[i] != this) {
-									if (threads[i].clientUserName != null) {
-
-										threads[i].out.println(username + " has left the PiChat");
-									}
-
-								}
-							}
-
-							i++;
-						}
-
-					}
-
-					synchronized (this) {
-						int i = 0;
-						while (i < MAX_USERS) {
-
+						if (threads[i] != null) {
 							if (threads[i] == this) {
 
-								threads[i] = null;
+								clientUserName = username;
+								break;
+
 							}
 
-							i++;
 						}
+
+						i++;
 
 					}
 
-					in.close();
-					out.close();
-					clientSocket.close();
+					for (int i1 = 0; i1 < MAX_USERS; i1++) {
+						if (threads[i1] != null && threads[i1] != this) {
+							threads[i1].out.println("New Person in chat: " + username);
+						}
 
-				} catch (IOException e) {
+					}
+				}
+
+				synchronized (this) {
+					int i = 0;
+					while (i < MAX_USERS) {
+
+						if (threads[i] != null) {
+							if (threads[i].clientUserName != null) {
+
+							}
+						}
+
+						i++;
+					}
 
 				}
 
+				synchronized (this) {
+					int i = 0;
+					while (i < MAX_USERS) {
+
+						if (threads[i] != null) {
+							if (threads[i] != this) {
+								if (threads[i].clientUserName != null) {
+
+									threads[i].out.println(username + " has left the PiChat");
+								}
+
+							}
+						}
+
+						i++;
+					}
+
+				}
+
+				synchronized (this) {
+					int i = 0;
+					while (i < MAX_USERS) {
+
+						if (threads[i] == this) {
+
+							threads[i] = null;
+						}
+
+						i++;
+					}
+
+				}
+
+				in.close();
+				out.close();
+				clientSocket.close();
+
+			} catch (IOException e) {
+
 			}
 
 		}
 
-
-		@Override
-		public void run() {
-			// TODO Auto-generated method stub
-			
-		}
 	}
-
+}
