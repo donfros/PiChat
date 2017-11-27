@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -40,22 +41,21 @@ public class Server implements Runnable {
 
 		private String clientUserName = null;
 		private DataInputStream in = null;
-		private printStream out = null;
+		private PrintStream out = null;
 		private Socket client = null;
 
-		public clientThread(socket client, clientThread[] threads) {
+		public clientThread(Socket client, clientThread[] threads) {
 			this.client = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
 
-		@Override
 		public void run() {
 			
-		 int MAX_USERS = this.MAX_USERS
+		 int MAX_USERS = this.MAX_USERS;
 				clientThread[] threads = this.threads;
 
-		}
+		
 
 		try
 
@@ -66,13 +66,13 @@ public class Server implements Runnable {
 			String username;
 			
 			while(true){
-				out.println("Enter your username: ")
+				out.println("Enter your username: ");
 				if (username.indexOf('@') == -1){ ///Don't get point of this do we need it??
 					break;
 				}
 			}
 			
-			out.println(username + " has entered the piChat to leave enter ")
+			out.println(username + " has entered the piChat to leave enter ");
 			
 			synchronized(this){
 				int i=0;
@@ -81,7 +81,7 @@ public class Server implements Runnable {
 					if (threads[i] != null ){
 						if (threads[i] == this){
 							
-							clientUserName = usename;
+							clientUserName = username;
 							break;
 							
 						}
@@ -97,9 +97,9 @@ public class Server implements Runnable {
 					
 				}
 		
-				 for (int i = 0; i < MAX_USERS; i++) {
-			          if (threads[i] != null && threads[i] != this) {
-			            threads[i].os.println("New Person in chat: " + name);
+				 for (int i1 = 0; i1 < MAX_USERS; i1++) {
+			          if (threads[i1] != null && threads[i1] != this) {
+			            threads[i1].out.println("New Person in chat: " + username);
 			          }
 				
 				}
@@ -111,9 +111,9 @@ public class Server implements Runnable {
 				while (i < MAX_USERS){
 					
 					if (threads[i] != null ){
-						if (threads[i].clienUserName != null){
+						if (threads[i].clientUserName != null){
 							
-							threads[i].out.println(userName)
+							threads[i].out.println(username);
 							
 						}
 					}
@@ -132,11 +132,11 @@ public class Server implements Runnable {
 					
 					if (threads[i] != null ){
 						if (threads[i] != this){
-							if (threads[i].clienUserName != null){
+							if (threads[i].clientUserName != null){
 								
 							
 							
-							threads[i].out.println(UserName + " has left the PiChat");
+							threads[i].out.println(username + " has left the PiChat");
 							}
 							
 						}
@@ -168,8 +168,8 @@ public class Server implements Runnable {
 			
 			
 			in.close();
-			out.close;
-			clientSockect.close();
+			out.close();
+			clientSocket.close();
 			
 		
 			
@@ -191,4 +191,5 @@ public class Server implements Runnable {
 
 	}
 
+}
 }
