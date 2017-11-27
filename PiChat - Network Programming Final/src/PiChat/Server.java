@@ -30,7 +30,7 @@ public class Server implements Runnable {
 		String serverSentence;
 		// Register service on port 12345
 		try {
-			jfid;sa 
+		
 			serverSocket = new ServerSocket(PORT);
 		} catch (IOException e) {
 			System.out.println(e);
@@ -60,22 +60,22 @@ public class Server implements Runnable {
 	public class clientThread { /// will need edits eclipse is not showing
 								/// errors for me
 
-<<<<<<< HEAD
+
 		private String clientUserName = null;
 		private DataInputStream in = null;
 		private PrintStream out = null;
 		private Socket client = null;
-=======
-		public class clientThread extends Thread {
->>>>>>> branch 'master' of https://github.com/donfros/PiChat.git
 
-<<<<<<< HEAD
+		public class clientThread extends Thread {
+
+
+
 		public clientThread(Socket client, clientThread[] threads) {
 			this.client = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
-=======
+
 			public clientThread(Socket clientSocket, clientThread[] threads) {
 
 			}
@@ -90,7 +90,7 @@ public class Server implements Runnable {
 				this.threads = threads;
 				MAX_USERS = threads.length;
 			}
->>>>>>> branch 'master' of https://github.com/donfros/PiChat.git
+
 
 		public void run() {
 			
@@ -235,14 +235,9 @@ public class Server implements Runnable {
 
 		}
 
-		public void run() {
-			// TODO Auto-generated method stub
+		
 
-<<<<<<< HEAD
-}
-}
-=======
 		}
 	}
-}}
->>>>>>> branch 'master' of https://github.com/donfros/PiChat.git
+}
+
