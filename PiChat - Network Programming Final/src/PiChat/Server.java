@@ -18,7 +18,7 @@ import java.net.Socket;
  */
 public class Server implements Runnable {
 
-
+///test
 	private static Socket clientSocket = null;
 	public static final int PORT = 7777;
 	private static ServerSocket serverSocket = null;
