@@ -65,7 +65,8 @@ public class Server implements Runnable {
 			private PrintStream out = null;
 			private Socket client = null;
 			private int MAX_USERS;
-			private final clientThread[] threads;
+			 private final clientThread[] threads;
+			
 			
 
 			public clientThread(Socket client, clientThread[] threads) {
@@ -90,6 +91,7 @@ public class Server implements Runnable {
 
 					while (true) {
 						out.println("Enter your username: ");
+						username = in.readLine().trim();
 						if (username.indexOf('@') == -1) { /// Don't get point
 															/// of this do we
 															/// need it??
@@ -132,7 +134,7 @@ public class Server implements Runnable {
 							if (threads[i] != null) {
 								if (threads[i].clientUserName != null) {
 
-									threads[i].out.println(username);
+								
 
 								}
 							}
