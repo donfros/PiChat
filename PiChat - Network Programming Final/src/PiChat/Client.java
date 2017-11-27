@@ -1,17 +1,16 @@
 package PiChat;
 
 import java.io.BufferedReader;
-import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
 public class Client implements Runnable {
-
+// fuck this
 	public final static int PORT = 7777;
 	private static Socket client = null;
-	private static DataInputStream is = null;
+	private static BufferedReader is = null;
 	private static BufferedReader iLine = null;
 	private static DataOutputStream os = null;
 	private static boolean closed = false;
@@ -21,14 +20,13 @@ public class Client implements Runnable {
 		// Open socket and initialize in/out streams
 		try {
 			client = new Socket("1.2.3.4", PORT);
-			is = new DataInputStream(client.getInputStream());
+			is = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			os = new DataOutputStream(client.getOutputStream());
 			iLine = new BufferedReader(new InputStreamReader(System.in));
 
 		} catch (IOException e) {
 			System.out.println(e);
 		}
-
 		// write to the socket
 		if (client != null && is != null && os != null) {
 			try {
@@ -55,7 +53,7 @@ public class Client implements Runnable {
 		try {
 			while ((response = is.readLine()) != null) {
 				System.out.println(response);
-				if (response.equals("Ending")) {
+				if (response.equals("Ending")) { //User types "Ending" to end connection with the server
 					break;
 				}
 				closed = true;
