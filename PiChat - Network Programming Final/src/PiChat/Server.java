@@ -79,30 +79,26 @@ public class Server {
 			       */
 			      in = new DataInputStream(clientSocket.getInputStream());
 			      out = new PrintStream(clientSocket.getOutputStream());
-			      String name;
+			      String username;
 			      while (true) {
-			        out.println("Enter your name.");
-			        name = in.readLine().trim();
-			        if (name.indexOf('@') == -1) {
-			          break;
-			        } else {
-			          out.println("The name should not contain '@' character.");
-			        }
+			        out.println("Enter your username.");
+			        username = in.readLine().trim();
+			        break;
 			      }
 
-			      /* Welcome the new the client. */
-			      out.println("Welcome " + name
-			          + " to our chat room.\nTo leave enter /quit in a new line.");
+			      
+			      out.println("Welcome " + username + " to our chat room.\nTo leave enter /quit in a new line.");
+			
 			      synchronized (this) {
 			        for (int i = 0; i < MAX_USERS; i++) {
 			          if (threads[i] != null && threads[i] == this) {
-			            clientUserName = "@" + name;
+			            clientUserName = "@" + username;
 			            break;
 			          }
 			        }
 			        for (int i = 0; i < MAX_USERS; i++) {
 			          if (threads[i] != null && threads[i] != this) {
-			            threads[i].out.println("*** A new user " + name
+			            threads[i].out.println("*** A new user " + username
 			                + " entered the chat room !!! ***");
 			          }
 			        }
@@ -117,7 +113,7 @@ public class Server {
 			          synchronized (this) {
 			            for (int i = 0; i < MAX_USERS; i++) {
 			              if (threads[i] != null && threads[i].clientUserName != null) {
-			                threads[i].out.println("<" + name + "> " + line);
+			                threads[i].out.println("<" + username + "> " + line);
 			              }
 			            }
 			          }
@@ -126,12 +122,12 @@ public class Server {
 			        for (int i = 0; i < MAX_USERS; i++) {
 			          if (threads[i] != null && threads[i] != this
 			              && threads[i].clientUserName != null) {
-			            threads[i].out.println("*** The user " + name
+			            threads[i].out.println("*** The user " + username
 			                + " is leaving the chat room !!! ***");
 			          }
 			        }
 			      }
-			      out.println("*** Bye " + name + " ***");
+			      out.println("*** Bye " + username + " ***");
 
 			      /*
 			       * Clean up. Set the current thread variable to null so that a new client
