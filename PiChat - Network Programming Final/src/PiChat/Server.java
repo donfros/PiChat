@@ -106,7 +106,7 @@ public class Server {
 						}
 					}
 				}
-				// allows users to talk back and forth 
+				// allows users to talk back and forth
 				while (true) {
 					String line = in.readLine();
 					if (line.startsWith("/exit")) {
@@ -130,8 +130,6 @@ public class Server {
 				}
 				out.println("Goodbye " + username);
 
-				
-				
 				// Deletes client once they exit the server
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
@@ -140,8 +138,7 @@ public class Server {
 						}
 					}
 				}
-				
-				
+
 				// closes input,output, and socket
 				in.close();
 				out.close();

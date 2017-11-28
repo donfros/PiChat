@@ -18,8 +18,8 @@ import java.net.UnknownHostException;
 public class Client implements Runnable {
 	public static String name = "";
 	public static int PORT = 7777;
-	// private static String host = "10.200.31.171";
-	private static String host = "127.0.0.1";
+	 private static String host = "10.200.31.171";
+//	private static String host = "127.0.0.1";
 
 	private static Socket cSock = null;
 	private static PrintStream ps = null;
