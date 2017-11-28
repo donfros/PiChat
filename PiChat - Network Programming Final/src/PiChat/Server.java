@@ -13,7 +13,6 @@ import java.net.Socket;
  */
 public class Server {
 
-	/// test
 	private static Socket cSock = null;
 	public static final int PORT = 7777;
 	private static ServerSocket sSock = null;
@@ -21,8 +20,6 @@ public class Server {
 	public static final clientThread[] clients = new clientThread[MAX_USERS];
 
 	public static void main(String[] args) {
-
-		// port 7777
 		try {
 
 			sSock = new ServerSocket(PORT);
@@ -96,7 +93,7 @@ public class Server {
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {
-							clientUserName = "@" + username;
+							clientUserName =  username;
 							break;
 						}
 					}

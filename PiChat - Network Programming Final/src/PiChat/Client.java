@@ -16,10 +16,15 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client implements Runnable {
-	public static String name = "";
+	public static String username = "";
 	public static int PORT = 7777;
+<<<<<<< HEAD
 	 private static String host = "10.200.31.171";
 //	private static String host = "127.0.0.1";
+=======
+	// private static String host = "10.200.31.171";
+	private static String host = "127.0.0.1"; //local port used for testing
+>>>>>>> branch 'TestBranch' of https://github.com/donfros/PiChat.git
 
 	private static Socket cSock = null;
 	private static PrintStream ps = null;
@@ -50,10 +55,10 @@ public class Client implements Runnable {
 				new Thread(new Client()).start();
 				while (!closed) {
 					String input = iLine.readLine().trim();
-					if (name.equals("")) { // set the user's name client-side so
+					if (username.equals("")) { // set the user's name client-side so
 											// they don't have to see their own
-											// messages (fixed on line 80)
-						name = input;
+											// messages (fixed in run method)
+						username = input;
 					} // end if
 					ps.println(input);
 				} // end while
@@ -79,7 +84,9 @@ public class Client implements Runnable {
 		String responseLine;
 		try {
 			while ((responseLine = dis.readLine()) != null) {
-				if (!responseLine.startsWith("[" + name + "]")) {
+				
+				//makes sure they don't see their own messages
+				if (!responseLine.startsWith("[" + username + "]")) {
 					System.out.println(responseLine); // prints what other users
 														// are saying
 				} // end if
