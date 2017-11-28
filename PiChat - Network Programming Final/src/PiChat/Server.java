@@ -68,8 +68,9 @@ public class Server {
 	}
 
 	/**
-	 * 
+	 * Allows for multi-threading for multiple users to join a server and talk to eachother in realtime
 	 * @author Evan Goyuk
+	 * 
 	 *
 	 */
 	public static class clientThread extends Thread {
@@ -83,8 +84,10 @@ public class Server {
 		/**
 		 * default constructor
 		 * 
-		 * @param client
+		 * @param client 
+		 * 		socket of client currently at
 		 * @param threads
+		 *      array of spots for clients to fill
 		 */
 
 		public clientThread(Socket client, clientThread[] threads) {
@@ -106,7 +109,7 @@ public class Server {
 
 			try {
 
-				// Makees input/output streams for each client
+				// Makes input/output streams for each client
 
 				in = new DataInputStream(cSock.getInputStream());
 				out = new PrintStream(cSock.getOutputStream());
