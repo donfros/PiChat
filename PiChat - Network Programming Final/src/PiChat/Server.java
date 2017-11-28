@@ -144,7 +144,16 @@ public class Server {
 					String line = in.readLine();
 					if (line.equals("/exit")) {
 						break;
-					} else if (line.equals("/list")) {
+					} else if (line.equals("/list") && threads[1] == null) {
+						out.print("------------------------------------------------\n");
+						out.print("There is currently " + userCount + " user in the PiChat Server\n");
+						for (int i = 0; i < MAX_USERS; i++) {
+							if (threads[i] != null) {
+								out.print(threads[i].getUsername() + "\n");
+							}
+						}
+						out.print("------------------------------------------------\n");
+					}else{
 						out.print("------------------------------------------------\n");
 						out.print("There are currently " + userCount + " users in the PiChat Server\n");
 						for (int i = 0; i < MAX_USERS; i++) {
@@ -153,8 +162,9 @@ public class Server {
 							}
 						}
 						out.print("------------------------------------------------\n");
-					} else if (line.equals("/help")) {
-						out.print("/list\nDisplays the number of users in the chatroom and their names.\n/exit\nCommand to leave server.\n");
+					} if (line.equals("/help")) {
+						out.print(
+								"/list\nDisplays the number of users in the chatroom and their names.\n/exit\nCommand to leave server.\n");
 					}
 					// Displays message to all clients
 					synchronized (this) {
