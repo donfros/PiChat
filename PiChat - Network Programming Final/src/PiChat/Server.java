@@ -19,12 +19,13 @@ public class Server {
 	private static ServerSocket sSock = null;
 	public static final int MAX_USERS = 4;
 	public static final clientThread[] clients = new clientThread[MAX_USERS];
+	public static int userCount = 0;
 
 	/**
 	 * Establishes the port (7777), and opens sockets for users, and allows the
 	 * users to join until the capacity is reached. If the server is full, it
 	 * displays a message informing the user that the server is full, and to try
-	 * joining again later. 
+	 * joining again later.
 	 * 
 	 * @param args
 	 *            -ignored-
@@ -49,6 +50,7 @@ public class Server {
 				for (i = 0; i < MAX_USERS; i++) {
 					if (clients[i] == null) {
 						(clients[i] = new clientThread(cSock, clients)).start();
+						userCount++;
 						break;
 					}
 				}
@@ -71,14 +73,15 @@ public class Server {
 	 *
 	 */
 	public static class clientThread extends Thread {
-
-		private String clientUserName = null;
+		private String[] commands = { "/list", "/exit", "/help" };
+		private String clientUsername = null;
 		private DataInputStream in = null;
 		private PrintStream out = null;
 		private int MAX_USERS;
 		private final clientThread[] threads;
-		
-		/**default constructor 
+
+		/**
+		 * default constructor
 		 * 
 		 * @param client
 		 * @param threads
@@ -88,8 +91,10 @@ public class Server {
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
+
 		/**
-		 * sets up the server for each client and allows users to talk to eachother  (non-Javadoc)
+		 * sets up the server for each client and allows users to talk to
+		 * eachother (non-Javadoc)
 		 * 
 		 * @see java.lang.Runnable#run()
 		 */
@@ -118,7 +123,7 @@ public class Server {
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {
-							clientUserName = username;
+							clientUsername = username;
 							break;
 						}
 					}
@@ -133,19 +138,32 @@ public class Server {
 					String line = in.readLine();
 					if (line.startsWith("/exit")) {
 						break;
+					} else if (line.startsWith("/list")) {
+						out.print("------------------------------------------------\n");
+						out.print("There are currently " + userCount + " users in the PiChat Server\n");
+						for (int i = 0; i < MAX_USERS; i++) {
+							if (threads[i] != null) {
+								out.print(threads[i].getUsername() + "\n");
+							}
+						}
+						out.print("------------------------------------------------\n");
+					} else if (line.startsWith("/help")) {
+						out.print("HELP\n");
 					}
 					// Displays message to all clients
 					synchronized (this) {
 						for (int i = 0; i < MAX_USERS; i++) {
-							if (threads[i] != null && threads[i].clientUserName != null) {
+
+							if (threads[i] != null && threads[i].clientUsername != null) {
 								threads[i].out.println("[" + username + "] " + line);
+
 							}
 						}
 					}
 				}
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
-						if (threads[i] != null && threads[i] != this && threads[i].clientUserName != null) {
+						if (threads[i] != null && threads[i] != this && threads[i].clientUsername != null) {
 							threads[i].out.println(username + " has left the chatroom.");
 						}
 					}
@@ -168,6 +186,10 @@ public class Server {
 			} catch (IOException e) {
 			}
 
+		}
+
+		private String getUsername() {
+			return this.clientUsername;
 		}
 
 	}

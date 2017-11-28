@@ -19,15 +19,15 @@ public class Client implements Runnable {
 	public static String username = "";
 	public static int PORT = 7777;
 
-	 private static String host = "10.200.31.171";
-//	private static String host = "127.0.0.1";
-
+	private static String host = "10.200.31.171";
+	// private static String host = "127.0.0.1";
 
 	private static Socket cSock = null;
 	private static PrintStream ps = null;
 	private static DataInputStream dis = null;
 	private static BufferedReader iLine = null;
 	private static boolean closed = false;
+	private String[] commands = {"/list", "/exit", "/help"};
 
 	public static void main(String[] args) {
 
@@ -44,7 +44,7 @@ public class Client implements Runnable {
 			System.err.println("Couldn't get I/O for the connection to the host " + host);
 		} // end IO Catch
 
-		//Write to the socket
+		// Write to the socket
 		if (cSock != null && ps != null && dis != null) {
 			try {
 
@@ -52,9 +52,12 @@ public class Client implements Runnable {
 				new Thread(new Client()).start();
 				while (!closed) {
 					String input = iLine.readLine().trim();
-					if (username.equals("")) { // set the user's name client-side so
-											// they don't have to see their own
-											// messages (fixed in run method)
+					if (username.equals("")) { // set the user's name
+												// client-side so
+												// they don't have to see their
+												// own
+												// messages (fixed in run
+												// method)
 						username = input;
 					} // end if
 					ps.println(input);
@@ -81,8 +84,8 @@ public class Client implements Runnable {
 		String responseLine;
 		try {
 			while ((responseLine = dis.readLine()) != null) {
-				
-				//makes sure they don't see their own messages
+
+				// makes sure they don't see their own messages
 				if (!responseLine.startsWith("[" + username + "]")) {
 					System.out.println(responseLine); // prints what other users
 														// are saying
