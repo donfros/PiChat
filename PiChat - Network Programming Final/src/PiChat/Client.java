@@ -81,7 +81,7 @@ public class Client implements Runnable {
 		String responseLine;
 		try {
 			while ((responseLine = dis.readLine()) != null) {
-				if (!responseLine.contains("<" + name + ">")) {
+				if (!responseLine.contains("[" + name + "]")) {
 					System.out.println(responseLine); // prints what other users
 														// are saying
 				} // end if
