@@ -151,7 +151,7 @@ public class Server {
 						}
 						out.print("------------------------------------------------\n");
 					} else if (line.startsWith("/help")) {
-						out.print("HELP ME\n");
+						out.print("HELP\n");
 					}
 					// Displays message to all clients
 					synchronized (this) {
