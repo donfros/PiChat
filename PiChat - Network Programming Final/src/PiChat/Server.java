@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 /**
+ * Server class creates and hosts the PiChat server
  * 
  * @author Sam Partlow
  *
@@ -19,13 +20,28 @@ public class Server {
 	public static final int MAX_USERS = 4;
 	public static final clientThread[] clients = new clientThread[MAX_USERS];
 
+	/**
+	 * Establishes the port (7777), and opens sockets for users, and allows the
+	 * users to join until the capacity is reached. If the server is full, it
+	 * displays a message informing the user that the server is full, and to try
+	 * joining again later. 
+	 * 
+	 * @param args
+	 *            -ignored-
+	 */
 	public static void main(String[] args) {
+		// establishes port 7777
 		try {
 
 			sSock = new ServerSocket(PORT);
 		} catch (IOException e) {
 			System.out.println(e);
 		}
+
+		/*
+		 * opens socket connection and allows users to join until the server is
+		 * full
+		 */
 		while (true) {
 			try {
 				cSock = sSock.accept();
@@ -60,7 +76,6 @@ public class Server {
 		private String clientUserName = null;
 		private DataInputStream in = null;
 		private PrintStream out = null;
-		private Socket client = null;
 		private int MAX_USERS;
 		private final clientThread[] threads;
 		
@@ -73,7 +88,6 @@ public class Server {
 		 */
 
 		public clientThread(Socket client, clientThread[] threads) {
-			this.client = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
@@ -107,7 +121,7 @@ public class Server {
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {
-							clientUserName =  username;
+							clientUserName = username;
 							break;
 						}
 					}
