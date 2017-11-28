@@ -141,7 +141,7 @@ public class Server {
 					String line = in.readLine();
 					if (line.startsWith("/exit")) {
 						break;
-					} else if (line.startsWith("/list")) {
+					} else if (line.equals("/list")) {
 						out.print("------------------------------------------------\n");
 						out.print("There are currently " + userCount + " users in the PiChat Server\n");
 						for (int i = 0; i < MAX_USERS; i++) {
