@@ -139,7 +139,7 @@ public class Server {
 				// allows users to talk back and forth
 				while (true) {
 					String line = in.readLine();
-					if (line.startsWith("/exit")) {
+					if (line.equals("/exit")) {
 						break;
 					} else if (line.equals("/list")) {
 						out.print("------------------------------------------------\n");
