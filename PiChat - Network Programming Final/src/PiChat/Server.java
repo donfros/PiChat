@@ -68,7 +68,9 @@ public class Server {
 	}
 
 	/**
-	 * Allows for multi-threading for multiple users to join a server and talk to eachother in realtime
+	 * Allows for multi-threading for multiple users to join a server and talk
+	 * to eachother in realtime
+	 * 
 	 * @author Evan Goyuk
 	 * 
 	 *
@@ -84,10 +86,10 @@ public class Server {
 		/**
 		 * default constructor
 		 * 
-		 * @param client 
-		 * 		socket of client currently at
+		 * @param client
+		 *            socket of client currently at
 		 * @param threads
-		 *      array of spots for clients to fill
+		 *            array of spots for clients to fill
 		 */
 
 		public clientThread(Socket client, clientThread[] threads) {
@@ -122,7 +124,8 @@ public class Server {
 
 				// displays welcome message to client once they have joined the
 				// server
-				out.println("Welcome to the PiChat Server " + username + "!\nType '/exit' to exit!");
+				out.println("Welcome to the PiChat server, " + username
+						+ "!\nType '/exit' to exit, and '/help' for a list of commands");
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {
@@ -150,16 +153,17 @@ public class Server {
 							}
 						}
 						out.print("------------------------------------------------\n");
-					} else if (line.startsWith("/help")) {
-						out.print("HELP\n");
+					} else if (line.equals("/help")) {
+						out.print("/list\nDisplays the number of users in the chatroom and their names.\n/exit\nCommand to leave server.\n");
 					}
 					// Displays message to all clients
 					synchronized (this) {
 						for (int i = 0; i < MAX_USERS; i++) {
+							if (!line.startsWith("/")) {
+								if (threads[i] != null && threads[i].clientUsername != null) {
+									threads[i].out.println("[" + username + "] " + line);
 
-							if (threads[i] != null && threads[i].clientUsername != null) {
-								threads[i].out.println("[" + username + "] " + line);
-
+								}
 							}
 						}
 					}
