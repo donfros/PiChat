@@ -95,7 +95,7 @@ public class Server {
 				}
 
 				/* Welcome the new the client. */
-				out.println("Welcome to the PiChat Server " + name + "!\nType 'quit' to exit!");
+				out.println("Welcome to the PiChat Server " + name + "!\nType '/quit' to exit!");
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {

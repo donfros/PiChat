@@ -42,9 +42,7 @@ public class Client implements Runnable {
 			System.err.println("Couldn't get I/O for the connection to the host " + host);
 		} // end IO Catch
 
-		/*
-		 * Write to the socket
-		 */
+		//Write to the socket
 		if (cSock != null && ps != null && dis != null) {
 			try {
 
