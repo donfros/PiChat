@@ -124,8 +124,27 @@ public class Server {
 
 				// displays welcome message to client once they have joined the
 				// server
-				out.println("Welcome to the PiChat server, " + username
-						+ "!\nType '/exit' to exit, and '/help' for a list of commands");
+				out.println("----------------------------------------------------------------------------------------------------------------------------\n");
+				out.println(
+						"\tPPPPPPPPPPPPPPPPP     iiii         CCCCCCCCCCCCChhhhhhh                                       tttt\n"
+								+ "\tP::::::::::::::::P   i::::i     CCC::::::::::::Ch:::::h                                    ttt:::t\n"
+								+ "\tP::::::PPPPPP:::::P   iiii    CC:::::::::::::::Ch:::::h                                    t:::::t\n"
+								+ "\tPP:::::P     P:::::P         C:::::CCCCCCCC::::Ch:::::h                                    t:::::t\n"
+								+ "          P::::P     P:::::Piiiiiii C:::::C       CCCCCC h::::h hhhhh         aaaaaaaaaaaaa  ttttttt:::::ttttttt\n"
+								+ "          P::::P     P:::::Pi:::::iC:::::C               h::::hh:::::hhh      a::::::::::::a t:::::::::::::::::t\n"
+								+ "	  P::::PPPPPP:::::P  i::::iC:::::C               h::::::::::::::hh    aaaaaaaaa:::::at:::::::::::::::::t\n"
+								+ "	  P:::::::::::::PP   i::::iC:::::C               h:::::::hhh::::::h            a::::atttttt:::::::tttttt\n"
+								+ "	  P::::PPPPPPPPP     i::::iC:::::C               h::::::h   h::::::h    aaaaaaa:::::a      t:::::t\n"
+								+ "	  P::::P             i::::iC:::::C               h:::::h     h:::::h  aa::::::::::::a      t:::::t\n"
+								+ "	  P::::P             i::::iC:::::C               h:::::h     h:::::h a::::aaaa::::::a      t:::::t\n"
+								+ "	  P::::P             i::::i C:::::C       CCCCCC h:::::h     h:::::ha::::a    a:::::a      t:::::t    tttttt\n"
+								+ "	PP::::::PP          i::::::i C:::::CCCCCCCC::::C h:::::h     h:::::ha::::a    a:::::a      t::::::tttt:::::t\n"
+								+ "	P::::::::P          i::::::i  CC:::::::::::::::C h:::::h     h:::::ha:::::aaaa::::::a      tt::::::::::::::t\n"
+								+ "	P::::::::P          i::::::i    CCC::::::::::::C h:::::h     h:::::h a::::::::::aa:::a       tt:::::::::::tt\n"
+								+ "	PPPPPPPPPP          iiiiiiii       CCCCCCCCCCCCC hhhhhhh     hhhhhhh  aaaaaaaaaa  aaaa         ttttttttttt\n");
+				out.println("----------------------------------------------------------------------------------------------------------------------------\n");
+				out.println("\t\t\t\t\tWelcome to the PiChat server, " + username
+						+ "!\n\t\t\t\tType '/exit' to exit, and '/help' for a list of commands");
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {
@@ -153,7 +172,7 @@ public class Server {
 							}
 						}
 						out.print("------------------------------------------------\n");
-					}else{
+					} else {
 						out.print("------------------------------------------------\n");
 						out.print("There are currently " + userCount + " users in the PiChat Server\n");
 						for (int i = 0; i < MAX_USERS; i++) {
@@ -162,7 +181,8 @@ public class Server {
 							}
 						}
 						out.print("------------------------------------------------\n");
-					} if (line.equals("/help")) {
+					}
+					if (line.equals("/help")) {
 						out.print(
 								"/list\nDisplays the number of users in the chatroom and their names.\n/exit\nCommand to leave server.\n");
 					}
