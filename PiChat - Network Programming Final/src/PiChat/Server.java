@@ -24,7 +24,7 @@ public class Server {
 	 * Establishes the port (7777), and opens sockets for users, and allows the
 	 * users to join until the capacity is reached. If the server is full, it
 	 * displays a message informing the user that the server is full, and to try
-	 * joining again later.
+	 * joining again later. 
 	 * 
 	 * @param args
 	 *            -ignored-
