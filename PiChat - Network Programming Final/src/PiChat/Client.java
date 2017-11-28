@@ -42,9 +42,7 @@ public class Client implements Runnable {
 			System.err.println("Couldn't get I/O for the connection to the host " + host);
 		} // end IO Catch
 
-		/*
-		 * Write to the socket
-		 */
+		//Write to the socket
 		if (cSock != null && ps != null && dis != null) {
 			try {
 
@@ -81,7 +79,7 @@ public class Client implements Runnable {
 		String responseLine;
 		try {
 			while ((responseLine = dis.readLine()) != null) {
-				if (!responseLine.contains("<" + name + ">")) {
+				if (!responseLine.startsWith("[" + name + "]")) {
 					System.out.println(responseLine); // prints what other users
 														// are saying
 				} // end if
