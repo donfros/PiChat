@@ -13,7 +13,6 @@ import java.net.Socket;
  */
 public class Server {
 
-	/// test
 	private static Socket cSock = null;
 	public static final int PORT = 7777;
 	private static ServerSocket sSock = null;
@@ -22,7 +21,7 @@ public class Server {
 
 	public static void main(String[] args) {
 
-		// Register service on port 12345
+		// Register service on port 7777
 		try {
 
 			sSock = new ServerSocket(PORT);
