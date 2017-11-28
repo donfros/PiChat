@@ -20,8 +20,6 @@ public class Server {
 	public static final clientThread[] clients = new clientThread[MAX_USERS];
 
 	public static void main(String[] args) {
-
-		// Register service on port 7777
 		try {
 
 			sSock = new ServerSocket(PORT);
@@ -77,50 +75,45 @@ public class Server {
 			clientThread[] threads = this.threads;
 
 			try {
-				/*
-				 * Create input and output streams for this client.
-				 */
+
+				// Makees input/output streams for each client
+
 				in = new DataInputStream(cSock.getInputStream());
 				out = new PrintStream(cSock.getOutputStream());
-				String name;
+				String username;
 				while (true) {
 					out.println("Please enter your username: ");
-					name = in.readLine().trim();
-					if (name.indexOf('@') == -1) {
-						break;
-					} else {
-						out.println("The name should not contain '@' character.");
-					}
+					username = in.readLine().trim();
+					break;
 				}
 
-				/* Welcome the new the client. */
-				out.println("Welcome to the PiChat Server " + name + "!\nType 'quit' to exit!");
+				// displays welcome message to client once they have joined the
+				// server
+				out.println("Welcome to the PiChat Server " + username + "!\nType '/exit' to exit!");
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] == this) {
-							clientUserName = "@" + name;
+							clientUserName =  username;
 							break;
 						}
 					}
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] != this) {
-							threads[i].out.println(name + " has entered the PiChat Server!");
+							threads[i].out.println(username + " has entered the PiChat Server!");
 						}
 					}
 				}
-				/* Start the conversation. */
+				// allows users to talk back and forth 
 				while (true) {
 					String line = in.readLine();
-					if (line.startsWith("/quit")) {
+					if (line.startsWith("/exit")) {
 						break;
 					}
-					/*
-					 * The message is public, broadcast it to all other clients.
-					 */
+					// Displays message to all clients
 					synchronized (this) {
 						for (int i = 0; i < MAX_USERS; i++) {
 							if (threads[i] != null && threads[i].clientUserName != null) {
-								threads[i].out.println("[" + name + "] " + line);
+								threads[i].out.println("[" + username + "] " + line);
 							}
 						}
 					}
@@ -128,16 +121,15 @@ public class Server {
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] != null && threads[i] != this && threads[i].clientUserName != null) {
-							threads[i].out.println(name + " has left the chatroom.");
+							threads[i].out.println(username + " has left the chatroom.");
 						}
 					}
 				}
-				out.println("Goodbye " + name);
+				out.println("Goodbye " + username);
 
-				/*
-				 * Clean up. Set the current thread variable to null so that a
-				 * new client could be accepted by the server.
-				 */
+				
+				
+				// Deletes client once they exit the server
 				synchronized (this) {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] == this) {
@@ -145,10 +137,9 @@ public class Server {
 						}
 					}
 				}
-				/*
-				 * Close the output stream, close the input stream, close the
-				 * socket.
-				 */
+				
+				
+				// closes input,output, and socket
 				in.close();
 				out.close();
 				cSock.close();
