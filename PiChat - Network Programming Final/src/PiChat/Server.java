@@ -62,12 +62,23 @@ public class Server {
 		private Socket client = null;
 		private int MAX_USERS;
 		private final clientThread[] threads;
+		
+		/**default constructor 
+		 * 
+		 * @param client
+		 * @param threads
+		 */
 
 		public clientThread(Socket client, clientThread[] threads) {
 			this.client = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
+		/**
+		 * sets up the server for each client and allows users to talk to eachother  (non-Javadoc)
+		 * 
+		 * @see java.lang.Runnable#run()
+		 */
 
 		public void run() {
 
