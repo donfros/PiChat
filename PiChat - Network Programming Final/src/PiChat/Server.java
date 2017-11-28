@@ -163,7 +163,7 @@ public class Server {
 					String line = in.readLine();
 					if (line.equals("/exit")) {
 						break;
-					} else if (line.equals("/list") && threads[1] == null) {
+					} else if (line.equals("/list") && userCount == 1) {
 						out.print("------------------------------------------------\n");
 						out.print("There is currently " + userCount + " user in the PiChat Server\n");
 						for (int i = 0; i < MAX_USERS; i++) {
@@ -172,7 +172,7 @@ public class Server {
 							}
 						}
 						out.print("------------------------------------------------\n");
-					} else {
+					} else if(line.equals("/list") && userCount > 1){
 						out.print("------------------------------------------------\n");
 						out.print("There are currently " + userCount + " users in the PiChat Server\n");
 						for (int i = 0; i < MAX_USERS; i++) {

@@ -19,8 +19,8 @@ public class Client implements Runnable {
 	public static String username = "";
 	public static int PORT = 7777;
 
-	private static String host = "10.200.31.171";
-	// private static String host = "10.200.31.171";
+	//private static String host = "10.200.31.171";
+	private static String host = "10.14.51.40";
 
 	private static Socket cSock = null;
 	private static PrintStream ps = null;
