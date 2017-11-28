@@ -1,5 +1,12 @@
 package PiChat;
 
+/**
+ * Class used to create a new instance of a client, allowing them to send and receive
+ * messages from the server. It is multi-threaded, allowing for multiple clients to connect
+ * to the server at once.
+ * 
+ * @author Steven D'Onfro
+ */
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -9,102 +16,80 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 public class Client implements Runnable {
-// fuck this
 	public static String name = "";
 	public static int PORT = 7777;
+	// private static String host = "10.200.31.171";
+	private static String host = "127.0.0.1";
 
-	private static String host = "10.200.31.171";
-	//private static String host = "127.0.0.1";
+	private static Socket cSock = null;
+	private static PrintStream ps = null;
+	private static DataInputStream dis = null;
+	private static BufferedReader iLine = null;
+	private static boolean closed = false;
 
-		 // The client socket
-		  private static Socket clientSocket = null;
-		  // The output stream
-		  private static PrintStream os = null;
-		  // The input stream
-		  private static DataInputStream is = null;
+	public static void main(String[] args) {
 
-		  private static BufferedReader inputLine = null;
-		  private static boolean closed = false;
-		  
-		  public static void main(String[] args) {
+		// Open socket and I/O streams
+		try {
+			cSock = new Socket(host, PORT);
+			iLine = new BufferedReader(new InputStreamReader(System.in));
+			ps = new PrintStream(cSock.getOutputStream());
+			dis = new DataInputStream(cSock.getInputStream());
+		} catch (UnknownHostException e) {
+			System.err.println("Don't know about host " + host);
 
-		    // The default host.
+		} catch (IOException e) {
+			System.err.println("Couldn't get I/O for the connection to the host " + host);
+		} // end IO Catch
 
-		    if (args.length < 2) {
-		      System.out
-		          .println("Usage: java MultiThreadChatClient <host> <portNumber>\n"
-		              + "Now using host=" + host + ", portNumber=" + PORT);
-		    } else {
-		      host = args[0];
-		      PORT = Integer.valueOf(args[1]).intValue();
-		    }
+		/*
+		 * Write to the socket
+		 */
+		if (cSock != null && ps != null && dis != null) {
+			try {
 
-		    /*
-		     * Open a socket on a given host and port. Open input and output streams.
-		     */
-		    try {
-		      clientSocket = new Socket(host, PORT);
-		      inputLine = new BufferedReader(new InputStreamReader(System.in));
-		      os = new PrintStream(clientSocket.getOutputStream());
-		      is = new DataInputStream(clientSocket.getInputStream());
-		    } catch (UnknownHostException e) {
-		      System.err.println("Don't know about host " + host);
-		    } catch (IOException e) {
-		      System.err.println("Couldn't get I/O for the connection to the host "
-		          + host);
-		    }
+				// Create a thread to read from the server.
+				new Thread(new Client()).start();
+				while (!closed) {
+					String input = iLine.readLine().trim();
+					if (name.equals("")) { // set the user's name client-side so
+											// they don't have to see their own
+											// messages (fixed on line 80)
+						name = input;
+					} // end if
+					ps.println(input);
+				} // end while
 
-		    /*
-		     * If everything has been initialized then we want to write some data to the
-		     * socket we have opened a connection to on the port portNumber.
-		     */
-		    if (clientSocket != null && os != null && is != null) {
-		      try {
+				// Close socket and I/O streams
+				ps.close();
+				dis.close();
+				cSock.close();
+			} catch (IOException e) {
+				System.err.println("IOException:  " + e);
+			} // end catch
+		} // end if
+	}// end main
 
-		        /* Create a thread to read from the server. */
-		        new Thread(new Client()).start();
-		        while (!closed) {
-		        	String input = inputLine.readLine().trim();
-		        	if(name.equals("")){
-		        		name = input;
-		        	}
-		          os.println(input);
-		        }
-		        /*
-		         * Close the output stream, close the input stream, close the socket.
-		         */
-		        os.close();
-		        is.close();
-		        clientSocket.close();
-		      } catch (IOException e) {
-		        System.err.println("IOException:  " + e);
-		      }
-		    }
-		  }
+	/*
+	 * Create a thread to read from the server. (non-Javadoc)
+	 * 
+	 * @see java.lang.Runnable#run()
+	 */
+	public void run() {
 
-		  /*
-		   * Create a thread to read from the server. (non-Javadoc)
-		   * 
-		   * @see java.lang.Runnable#run()
-		   */
-		public void run() {
-		    /*
-		     * Keep on reading from the socket till we receive "Bye" from the
-		     * server. Once we received that then we want to break.
-		     */
-		    String responseLine;
-		    try {
-		      while ((responseLine = is.readLine()) != null) {
-		    	  if(!responseLine.contains("<"+name+">")){
-		    		  System.out.println(responseLine);
-		    	  }
-		        if (responseLine.indexOf("*** Bye") != -1)
-		          break;
-		      }
-		      closed = true;
-		    } catch (IOException e) {
-		      System.err.println("IOException:  " + e);
-		    }
-		  }
+		// Read from socket
+		String responseLine;
+		try {
+			while ((responseLine = dis.readLine()) != null) {
+				if (!responseLine.contains("<" + name + ">")) {
+					System.out.println(responseLine); // prints what other users
+														// are saying
+				} // end if
+			} // end while
+			closed = true;
+		} catch (IOException e) {
+			System.err.println("IOException:  " + e);
+		} // end catch
+	}// end run
 
-}
+}// end Client
