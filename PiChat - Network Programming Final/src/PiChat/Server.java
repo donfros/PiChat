@@ -17,7 +17,7 @@ public class Server {
 	private static Socket cSock = null;
 	public static final int PORT = 7777;
 	private static ServerSocket sSock = null;
-	public static final int MAX_USERS = 4;
+	public static final int MAX_USERS = 10;
 	public static final clientThread[] clients = new clientThread[MAX_USERS];
 	public static int userCount = 0;
 
@@ -82,7 +82,7 @@ public class Server {
 		private PrintStream out = null;
 		private int MAX_USERS;
 		private final clientThread[] threads;
-		private Socket cSock = null;
+		private Socket cTSock = null;
 
 		/**
 		 * default constructor
@@ -94,7 +94,7 @@ public class Server {
 		 */
 
 		public clientThread(Socket client, clientThread[] threads) {
-			this.cSock = client;
+			this.cTSock = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
@@ -115,8 +115,8 @@ public class Server {
 
 				// Makes input/output streams for each client
 
-				in = new DataInputStream(cSock.getInputStream());
-				out = new PrintStream(cSock.getOutputStream());
+				in = new DataInputStream(cTSock.getInputStream());
+				out = new PrintStream(cTSock.getOutputStream());
 				String username;
 				while (true) {
 					out.println("Please enter your username: ");
@@ -224,7 +224,7 @@ public class Server {
 				// closes input,output, and socket
 				in.close();
 				out.close();
-				cSock.close();
+				cTSock.close();
 			} catch (IOException e) {
 			}
 
