@@ -77,7 +77,7 @@ public class Server {
 	 *
 	 */
 	public static class clientThread extends Thread {
-		//private String[] commands = { "/list", "/exit", "/help" };
+		// private String[] commands = { "/list", "/exit", "/help" };
 		private String clientUsername = null;
 		private DataInputStream in = null;
 		private PrintStream out = null;
@@ -166,8 +166,8 @@ public class Server {
 				// allows users to talk back and forth
 				while (true) {
 					String line = in.readLine();
-					
-					//commands
+
+					// commands
 					if (line.equals("/exit")) {
 						break;
 					} else if (line.equals("/list") && userCount == 1) {
@@ -191,20 +191,21 @@ public class Server {
 					}
 					if (line.equals("/help")) {
 						out.print(
-								"/list\nDisplays the number of users in the chatroom and their names.\n/exit\nCommand to leave server.\n");
+								"/list\nDisplays the number of users in the chatroom and their names."
+								+ "\n/exit\nCommand to leave server.\n");
 					}
-					if(line.equals("/kick")){
+					if (line.equals("/kick")) {
 						String userToKick;
 						out.print("Who would you like to kick?");
 						userToKick = in.readLine();
-						for(int i = 0; i < MAX_USERS; i++){
-							if(threads[i] != null && threads[i].getUsername().equals(userToKick)){
+						for (int i = 0; i < MAX_USERS; i++) {
+							if (threads[i] != null && threads[i].getUsername().equals(userToKick)) {
 								threads[i] = null;
 								out.println(userToKick + " has been removed from the server");
 							}
 						}
 					}
-					
+
 					// Displays message to all clients
 					synchronized (this) {
 						for (int i = 0; i < MAX_USERS; i++) {
