@@ -165,6 +165,8 @@ public class Server {
 				// allows users to talk back and forth
 				while (true) {
 					String line = in.readLine();
+					
+					//commands
 					if (line.equals("/exit")) {
 						break;
 					} else if (line.equals("/list") && userCount == 1) {
@@ -190,6 +192,18 @@ public class Server {
 						out.print(
 								"/list\nDisplays the number of users in the chatroom and their names.\n/exit\nCommand to leave server.\n");
 					}
+					if(line.equals("/kick")){
+						String userToKick;
+						out.print("Who would you like to kick?");
+						userToKick = in.readLine();
+						for(int i = 0; i < MAX_USERS; i++){
+							if(threads[i] != null && threads[i].getUsername().equals(userToKick)){
+								threads[i] = null;
+								out.println(userToKick + " has been removed from the server");
+							}
+						}
+					}
+					
 					// Displays message to all clients
 					synchronized (this) {
 						for (int i = 0; i < MAX_USERS; i++) {
