@@ -28,7 +28,6 @@ public class Client implements Runnable {
 	private static DataInputStream dis = null;
 	private static BufferedReader iLine = null;
 	private static boolean closed = false;
-	private String[] commands = {"/list", "/exit", "/help"};
 
 	public static void main(String[] args) {
 

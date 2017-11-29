@@ -72,6 +72,7 @@ public class Server {
 	 * to eachother in realtime
 	 * 
 	 * @author Evan Goyuk
+	 * @author Sam Partlow
 	 * 
 	 *
 	 */
