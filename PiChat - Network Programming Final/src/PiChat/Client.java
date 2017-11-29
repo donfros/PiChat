@@ -20,7 +20,7 @@ public class Client implements Runnable {
 	public static int PORT = 7777;
 
 
-	private static String host = "10.14.51.40";
+	private static String host = "127.0.0.1";
 
 
 	private static Socket cSock = null;

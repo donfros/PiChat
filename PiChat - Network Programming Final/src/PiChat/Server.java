@@ -76,12 +76,13 @@ public class Server {
 	 *
 	 */
 	public static class clientThread extends Thread {
-		private String[] commands = { "/list", "/exit", "/help" };
+		//private String[] commands = { "/list", "/exit", "/help" };
 		private String clientUsername = null;
 		private DataInputStream in = null;
 		private PrintStream out = null;
 		private int MAX_USERS;
 		private final clientThread[] threads;
+		private Socket cSock = null;
 
 		/**
 		 * default constructor
@@ -93,6 +94,7 @@ public class Server {
 		 */
 
 		public clientThread(Socket client, clientThread[] threads) {
+			this.cSock = client;
 			this.threads = threads;
 			MAX_USERS = threads.length;
 		}
@@ -124,7 +126,8 @@ public class Server {
 
 				// displays welcome message to client once they have joined the
 				// server
-				out.println("----------------------------------------------------------------------------------------------------------------------------\n");
+				out.println(
+						"----------------------------------------------------------------------------------------------------------------------------\n");
 				out.println(
 						"\tPPPPPPPPPPPPPPPPP     iiii         CCCCCCCCCCCCChhhhhhh                                       tttt\n"
 								+ "\tP::::::::::::::::P   i::::i     CCC::::::::::::Ch:::::h                                    ttt:::t\n"
@@ -142,7 +145,8 @@ public class Server {
 								+ "	P::::::::P          i::::::i  CC:::::::::::::::C h:::::h     h:::::ha:::::aaaa::::::a      tt::::::::::::::t\n"
 								+ "	P::::::::P          i::::::i    CCC::::::::::::C h:::::h     h:::::h a::::::::::aa:::a       tt:::::::::::tt\n"
 								+ "	PPPPPPPPPP          iiiiiiii       CCCCCCCCCCCCC hhhhhhh     hhhhhhh  aaaaaaaaaa  aaaa         ttttttttttt\n");
-				out.println("----------------------------------------------------------------------------------------------------------------------------\n");
+				out.println(
+						"----------------------------------------------------------------------------------------------------------------------------\n");
 				out.println("\t\t\t\t\tWelcome to the PiChat server, " + username
 						+ "!\n\t\t\t\tType '/exit' to exit, and '/help' for a list of commands");
 				synchronized (this) {
@@ -172,7 +176,7 @@ public class Server {
 							}
 						}
 						out.print("------------------------------------------------\n");
-					} else if(line.equals("/list") && userCount > 1){
+					} else if (line.equals("/list") && userCount > 1) {
 						out.print("------------------------------------------------\n");
 						out.print("There are currently " + userCount + " users in the PiChat Server\n");
 						for (int i = 0; i < MAX_USERS; i++) {
@@ -212,6 +216,7 @@ public class Server {
 					for (int i = 0; i < MAX_USERS; i++) {
 						if (threads[i] == this) {
 							threads[i] = null;
+							userCount--;
 						}
 					}
 				}
