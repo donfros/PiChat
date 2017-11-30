@@ -1,12 +1,5 @@
 package PiChat;
 
-/**
- * Class used to create a new instance of a client, allowing them to send and receive
- * messages from the server. It is multi-threaded, allowing for multiple clients to connect
- * to the server at once.
- * 
- * @author Steven D'Onfro
- */
 import java.io.BufferedReader;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -14,6 +7,14 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+/**
+ * Class used to create a new instance of a client, allowing them to send and receive
+ * messages from the server. It is multi-threaded, allowing for multiple clients to connect
+ * to the server at once.
+ * 
+ * @author Steven D'Onfro
+ */
 
 public class Client implements Runnable {
 	public static String username = "";
@@ -27,6 +28,12 @@ public class Client implements Runnable {
 	private static BufferedReader iLine = null;
 	private static boolean closed = false;
 
+	/**
+	 * Creates socket and all I/O Streams for the new user. Then starts a new thread for them
+	 * within the server that is open and accepting user input until it is closed.
+	 * @param args
+	 * 		Not used
+	 */
 	public static void main(String[] args) {
 
 		// Open socket and I/O streams
